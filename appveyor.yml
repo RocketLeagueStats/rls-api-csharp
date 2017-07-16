@@ -16,7 +16,6 @@ before_build:
   - appveyor-retry dotnet restore "src\RLSApi" -v Minimal
 
 build_script:
-  - dotnet restore
   - dotnet build "src\RLSApi" -c Release --version-suffix %LABEL%
   
 after_build:
