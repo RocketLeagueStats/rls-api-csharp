@@ -13,7 +13,7 @@ environment:
   DOTNET_CLI_TELEMETRY_OPTOUT: 1
 
 before_build:
-  - appveyor-retry dotnet restore -v Minimal
+  - appveyor-retry dotnet restore "src\RLSApi" -v Minimal
 
 build_script:
   - dotnet restore
