@@ -1,0 +1,23 @@
+# Version will be manually specified through RLSApi\RLSApi.csproj instead of CI versioning.
+
+branches:
+  only:
+  - master
+
+assembly_info:
+  patch: false
+
+configuration: Release
+
+environment:
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1
+
+build_script:
+  - ps: dotnet restore
+  - ps: dotnet build .\src\RLSApi\RLSApi.csproj -c Release
+  
+after_build:
+  - ps: dotnet pack .\src\RLSApi\RLSApi.csproj -c Release
+  
+artifacts:
+  - path: .\**\artifacts\*.nupkg
