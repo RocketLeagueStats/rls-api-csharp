@@ -13,6 +13,7 @@
     <PackageProjectUrl>https://github.com/RocketLeagueStats/rls-api-csharp</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/RocketLeagueStats/rls-api-csharp/blob/master/LICENSE.md</PackageLicenseUrl>
     <Copyright>AeonLucid</Copyright>
+    <Version>1.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,4 +1,5 @@
 ﻿using System;
+using RLSApi.Net.Models;
 
 namespace RLSApi.Exceptions
 {
@@ -15,5 +16,9 @@ namespace RLSApi.Exceptions
         public RLSApiException(string message, Exception innerException) : base(message, innerException)
         {
         }
+
+        public int HttpStatusCode { get; set; }
+
+        public Error RlsError { get; set; }
     }
 }

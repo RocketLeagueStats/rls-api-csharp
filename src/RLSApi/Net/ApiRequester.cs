@@ -3,6 +3,8 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using RLSApi.Exceptions;
+using RLSApi.Net.Models;
 
 namespace RLSApi.Net
 {
@@ -40,7 +42,8 @@ namespace RLSApi.Net
         {
             using (var request = new HttpRequestMessage(HttpMethod.Post, relativeUrl))
             {
-                request.Content = new StringContent(JsonConvert.SerializeObject(data, Formatting.None), Encoding.UTF8, "application/json");
+                var requestData = JsonConvert.SerializeObject(data, Formatting.None);
+                request.Content = new StringContent(requestData, Encoding.UTF8, "application/json");
 
                 using (var response = await SendAsync(request))
                 {
@@ -53,7 +56,39 @@ namespace RLSApi.Net
 
         protected virtual async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request)
         {
-            return await _client.SendAsync(request);
+            var response = await _client.SendAsync(request);
+            if (response.IsSuccessStatusCode)
+            {
+                return response;
+            }
+
+            try
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync();
+
+                if (string.IsNullOrEmpty(errorMessage))
+                {
+                    throw new RLSApiException($"Request failed with status code {(int)response.StatusCode} ({response.StatusCode}), there was no error message available.")
+                    {
+                        HttpStatusCode = (int)response.StatusCode
+                    };
+                }
+
+                var error = JsonConvert.DeserializeObject<Error>(errorMessage);
+
+                throw new RLSApiException($"Request failed with status code {(int)response.StatusCode} ({response.StatusCode}), RLS: '{error.Message}'.")
+                {
+                    HttpStatusCode = (int)response.StatusCode,
+                    RlsError = error
+                };
+            }
+            catch (JsonException e)
+            {
+                throw new RLSApiException($"Request failed with status code {(int)response.StatusCode} ({response.StatusCode}), we were unable to parse the error message.", e)
+                {
+                    HttpStatusCode = (int)response.StatusCode
+                };
+            }
         }
 
         public void Dispose()
