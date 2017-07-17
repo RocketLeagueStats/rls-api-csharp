@@ -11,7 +11,7 @@
     <PackageTags>rocket league stats;rocket league;rlstats</PackageTags>
     <PackageIconUrl>http://i.imgur.com/UzdtC6c.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/RocketLeagueStats/rls-api-csharp</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/RocketLeagueStats/rls-api-csharp/blob/master/LICENSE.md</PackageLicenseUrl>
+    <PackageLicenseUrl>https://github.com/RocketLeagueStats/rls-api-csharp/blob/master/LICENSE</PackageLicenseUrl>
     <Copyright>AeonLucid</Copyright>
     <Version>1.1.0</Version>
   </PropertyGroup>
