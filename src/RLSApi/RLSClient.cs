@@ -9,7 +9,7 @@ using RLSApi.Net.Requests;
 
 namespace RLSApi
 {
-    public class RLSClient
+    public class RLSClient : IDisposable
     {
         private readonly ApiRequester _api;
 
@@ -120,6 +120,11 @@ namespace RLSApi
         public async Task<Player[]> GetLeaderboardStatAsync(RlsStatType statType)
         {
             return await _api.Get<Player[]>($"leaderboard/stat?type={statType.ToString().ToLower()}");
+        }
+
+        public void Dispose()
+        {
+            _api?.Dispose();
         }
     }
 }
