@@ -11,7 +11,7 @@ This is the official C# client library for the RocketLeagueStats API.
 
 ### Supported Platforms
 
-* [.NET Standard 1.2](https://github.com/dotnet/standard/blob/master/docs/versions.md)
+* [.NET Standard 2.0](https://github.com/dotnet/standard/blob/master/docs/versions.md)
 
 ### NuGet
 

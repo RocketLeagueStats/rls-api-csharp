@@ -5,7 +5,7 @@
     <Authors>AeonLucid</Authors>
     <Company />
     <Product />
-    <Description>.NET Standard 1.2 library to access the RocketLeagueStats API.</Description>
+    <Description>.NET Standard 2.0 library to access the RocketLeagueStats API.</Description>
     <RepositoryUrl>https://github.com/RocketLeagueStats/rls-api-csharp</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>rocket league stats;rocket league;rlstats</PackageTags>
@@ -13,7 +13,7 @@
     <PackageProjectUrl>https://github.com/RocketLeagueStats/rls-api-csharp</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/RocketLeagueStats/rls-api-csharp/blob/master/LICENSE</PackageLicenseUrl>
     <Copyright>AeonLucid</Copyright>
-    <Version>1.2.0</Version>
+    <Version>1.2.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
