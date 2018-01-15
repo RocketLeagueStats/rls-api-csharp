@@ -19,7 +19,7 @@ namespace RLSApi.Net
 
         private DateTime _rateLimitResetRemaining;
 
-        public ApiRequesterThrottle(string apiKey) : base(apiKey)
+        public ApiRequesterThrottle(string apiKey, Func<HttpResponseMessage, Task> exceptionHandler = null) : base(apiKey, exceptionHandler)
         {
             _queue = new Semaphore(1, 1);
             _rateLimitRemaining = 2;
@@ -45,11 +45,11 @@ namespace RLSApi.Net
 
                 var response = await base.SendAsync(request);
 
-                if (response.Headers.TryGetValues("x-rate-limit-remaining", out IEnumerable<string> rateLimitRemainingValues) &&
-                    response.Headers.TryGetValues("x-rate-limit-reset-remaining", out IEnumerable<string> rateLimitResetValues))
+                if (response.Headers.TryGetValues("x-rate-limit-remaining", out var rateLimitRemainingValues) &&
+                    response.Headers.TryGetValues("x-rate-limit-reset-remaining", out var rateLimitResetValues))
                 {
-                    if (int.TryParse(rateLimitRemainingValues.First(), out int rateLimitRemaining) &&
-                        int.TryParse(rateLimitResetValues.First(), out int rateLimitResetRemaining))
+                    if (int.TryParse(rateLimitRemainingValues.First(), out var rateLimitRemaining) &&
+                        int.TryParse(rateLimitResetValues.First(), out var rateLimitResetRemaining))
                     {
                         _rateLimitRemaining = rateLimitRemaining;
                         _rateLimitResetRemaining = DateTime.UtcNow.AddMilliseconds(rateLimitResetRemaining);

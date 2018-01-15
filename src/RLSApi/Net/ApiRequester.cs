@@ -14,8 +14,9 @@ namespace RLSApi.Net
     internal class ApiRequester : IDisposable
     {
         private readonly HttpClient _client;
+        private readonly Func<HttpResponseMessage, Task> _httpExceptionHandler;
 
-        public ApiRequester(string apiKey)
+        public ApiRequester(string apiKey, Func<HttpResponseMessage, Task> exceptionHandler = null)
         {
             _client = new HttpClient
             {
@@ -25,18 +26,47 @@ namespace RLSApi.Net
                     { "Authorization", apiKey }
                 }
             };
+
+            _httpExceptionHandler = exceptionHandler ?? (async response =>
+            {
+                try
+                {
+                    var errorMessage = await response.Content.ReadAsStringAsync();
+
+                    if (string.IsNullOrEmpty(errorMessage))
+                    {
+                        throw new RLSApiException($"Request failed with status code {(int)response.StatusCode} ({response.StatusCode}), there was no error message available.")
+                        {
+                            HttpStatusCode = (int)response.StatusCode
+                        };
+                    }
+
+                    var error = JsonConvert.DeserializeObject<Error>(errorMessage);
+
+                    throw new RLSApiException($"Request failed with status code {(int)response.StatusCode} ({response.StatusCode}), RLS: '{error.Message}'.")
+                    {
+                        HttpStatusCode = (int)response.StatusCode,
+                        RlsError = error
+                    };
+                }
+                catch (JsonException e)
+                {
+                    throw new RLSApiException($"Request failed with status code {(int)response.StatusCode} ({response.StatusCode}), we were unable to parse the error message.", e)
+                    {
+                        HttpStatusCode = (int)response.StatusCode
+                    };
+                }
+            });
         }
 
         public async Task<T> Get<T>(string relativeUrl)
         {
             using (var request = new HttpRequestMessage(HttpMethod.Get, relativeUrl))
-            using (var response = await SendAsync(request))
-            {
-                var result = await response.Content.ReadAsStringAsync();
+                return await SendAndReceiveAsync<T>(request);
 
-                return JsonConvert.DeserializeObject<T>(result);
-            }
         }
+
+
 
         public async Task<T> Post<T>(string relativeUrl, object data)
         {
@@ -44,52 +74,26 @@ namespace RLSApi.Net
             {
                 var requestData = JsonConvert.SerializeObject(data, Formatting.None);
                 request.Content = new StringContent(requestData, Encoding.UTF8, "application/json");
+                return await SendAndReceiveAsync<T>(request);
 
-                using (var response = await SendAsync(request))
-                {
-                    var result = await response.Content.ReadAsStringAsync();
-
-                    return JsonConvert.DeserializeObject<T>(result);
-                }
             }
+        }
+
+        private async Task<T> SendAndReceiveAsync<T>(HttpRequestMessage request)
+        {
+            var response = await SendAsync(request);
+            if (response.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync());
+            await _httpExceptionHandler.Invoke(response);
+            return default(T);
         }
 
         protected virtual async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request)
         {
-            var response = await _client.SendAsync(request);
-            if (response.IsSuccessStatusCode)
-            {
-                return response;
-            }
-
-            try
-            {
-                var errorMessage = await response.Content.ReadAsStringAsync();
-
-                if (string.IsNullOrEmpty(errorMessage))
-                {
-                    throw new RLSApiException($"Request failed with status code {(int)response.StatusCode} ({response.StatusCode}), there was no error message available.")
-                    {
-                        HttpStatusCode = (int)response.StatusCode
-                    };
-                }
-
-                var error = JsonConvert.DeserializeObject<Error>(errorMessage);
-
-                throw new RLSApiException($"Request failed with status code {(int)response.StatusCode} ({response.StatusCode}), RLS: '{error.Message}'.")
-                {
-                    HttpStatusCode = (int)response.StatusCode,
-                    RlsError = error
-                };
-            }
-            catch (JsonException e)
-            {
-                throw new RLSApiException($"Request failed with status code {(int)response.StatusCode} ({response.StatusCode}), we were unable to parse the error message.", e)
-                {
-                    HttpStatusCode = (int)response.StatusCode
-                };
-            }
+            return await _client.SendAsync(request);
         }
+
+
 
         public void Dispose()
         {
