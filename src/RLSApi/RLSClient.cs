@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using RLSApi.Data;
 using RLSApi.Net;
@@ -13,9 +14,9 @@ namespace RLSApi
     {
         private readonly ApiRequester _api;
 
-        public RLSClient(string apiKey, bool throttle = true)
+        public RLSClient(string apiKey, bool throttle = true, Func<HttpResponseMessage, Task> httpExceptionHandler = null)
         {
-            _api = throttle ? new ApiRequesterThrottle(apiKey) : new ApiRequester(apiKey);
+            _api = throttle ? new ApiRequesterThrottle(apiKey, httpExceptionHandler) : new ApiRequester(apiKey, httpExceptionHandler);
         }
 
         /// <summary>

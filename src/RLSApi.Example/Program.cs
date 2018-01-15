@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using RLSApi.Data;
 using RLSApi.Net.Requests;
@@ -16,19 +17,29 @@ namespace RLSApi.Example
             var apiKey = Environment.GetEnvironmentVariable("RLS_API_KEY");
             
             // Initialize RLSClient.
-            var client = new RLSClient(apiKey);
+            var client = new RLSClient(apiKey, httpExceptionHandler: async res =>
+            {
+                Console.WriteLine(res.ToString());
+            });
 
             // Retrieve a single player.
-            var player = await client.GetPlayerAsync(RlsPlatform.Steam, "76561198033338223");
-            var playerSeasonSix = player.RankedSeasons.FirstOrDefault(x => x.Key == RlsSeason.Six);
-            if (playerSeasonSix.Value != null)
+            var player = await client.GetPlayerAsync(RlsPlatform.Steam, "7656198033338223");
+            if (player != null)
             {
-                Console.WriteLine($"# Player: {player.DisplayName}");
-
-                foreach (var playerRank in playerSeasonSix.Value)
+                var playerSeasonSix = player.RankedSeasons.FirstOrDefault(x => x.Key == RlsSeason.Six);
+                if (playerSeasonSix.Value != null)
                 {
-                    Console.WriteLine($"{playerRank.Key}: {playerRank.Value.RankPoints} rating");
+                    Console.WriteLine($"# Player: {player.DisplayName}");
+
+                    foreach (var playerRank in playerSeasonSix.Value)
+                    {
+                        Console.WriteLine($"{playerRank.Key}: {playerRank.Value.RankPoints} rating");
+                    }
                 }
+            }
+            else
+            {
+                Console.WriteLine("Could not find player");
             }
 
             // Retrieve multiple players.
