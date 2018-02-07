@@ -37,7 +37,7 @@ namespace RLSApi
         }
 
         /// <summary>
-        ///     Retrieves season data.
+        ///     Retrieves playlists data.
         /// </summary>
         /// <returns></returns>
         public async Task<Playlist[]> GetPlaylistsAsync()

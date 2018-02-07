@@ -20,7 +20,7 @@ namespace RLSApi.Example
 
             // Retrieve a single player.
             var player = await client.GetPlayerAsync(RlsPlatform.Steam, "76561198033338223");
-            var playerSeasonSix = player.RankedSeasons.FirstOrDefault(x => x.Key == RlsSeason.Six);
+            var playerSeasonSix = player.RankedSeasons.FirstOrDefault(x => x.Key == RlsSeason.Seven);
             if (playerSeasonSix.Value != null)
             {
                 Console.WriteLine($"# Player: {player.DisplayName}");
