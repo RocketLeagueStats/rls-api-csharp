@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard1.1;net45</TargetFrameworks>
     <Authors>AeonLucid</Authors>
     <Company />
     <Product />
-    <Description>.NET Standard 2.0 library to access the RocketLeagueStats API.</Description>
+    <Description>.NET library to access the RocketLeagueStats API.</Description>
     <RepositoryUrl>https://github.com/RocketLeagueStats/rls-api-csharp</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>rocket league stats;rocket league;rlstats</PackageTags>
@@ -13,8 +13,12 @@
     <PackageProjectUrl>https://github.com/RocketLeagueStats/rls-api-csharp</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/RocketLeagueStats/rls-api-csharp/blob/master/LICENSE</PackageLicenseUrl>
     <Copyright>AeonLucid</Copyright>
-    <Version>1.3.0</Version>
+    <Version>1.4.0</Version>
   </PropertyGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
+    <Reference Include="System.Net.Http" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />

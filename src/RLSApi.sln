@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.15
+VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RLSApi", "RLSApi\RLSApi.csproj", "{75321AB1-50FE-4112-902A-C2604DDB8932}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RLSApi.Example", "RLSApi.Example\RLSApi.Example.csproj", "{CE55593F-FC7B-4DE0-A384-EAD9482C6882}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RLSApi.Example", "RLSApi.Example\RLSApi.Example.csproj", "{CE55593F-FC7B-4DE0-A384-EAD9482C6882}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,5 +24,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D0E60821-B4D0-47F1-992E-4BCEF04514C5}
 	EndGlobalSection
 EndGlobal
