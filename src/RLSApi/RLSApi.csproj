@@ -13,7 +13,7 @@
     <PackageProjectUrl>https://github.com/RocketLeagueStats/rls-api-csharp</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/RocketLeagueStats/rls-api-csharp/blob/master/LICENSE</PackageLicenseUrl>
     <Copyright>AeonLucid</Copyright>
-    <Version>1.4.0</Version>
+    <Version>1.5.0</Version>
   </PropertyGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
